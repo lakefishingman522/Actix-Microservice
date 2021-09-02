@@ -8,4 +8,6 @@ edition = "2018"
 actix-web = "3.3.2"
 dotenv = "0.15.0"
 jwt = "0.14.0"
+hmac = "0.11.0"
+sha2 = "0.9.6"
 serde = { version ="1"}

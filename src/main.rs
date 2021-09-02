@@ -3,7 +3,9 @@ use dotenv::dotenv;
 use std::env;
 
 mod handlers;
+mod jwt;
 mod state;
+mod user;
 
 use handlers::auth::auth;
 use handlers::index::index;

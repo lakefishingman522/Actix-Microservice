@@ -1,13 +1,8 @@
+use crate::jwt;
 use crate::state::AppState;
-use actix_web::{web, HttpResponse, Responder};
-use serde::{Deserialize, Serialize};
+use actix_web::{HttpResponse, Responder};
 
-#[derive(Serialize, Deserialize)]
-pub struct User {
-  uuid: String,
-  email: String,
-  password: String,
-}
+use crate::user::User;
 
 pub async fn auth() -> impl Responder {
   let user = User {
@@ -16,5 +11,9 @@ pub async fn auth() -> impl Responder {
     password: "11111".to_owned(),
   };
 
-  HttpResponse::Ok().json(user)
+  let token = jwt::generate_token(user);
+
+  HttpResponse::Ok()
+    //.json(user)
+    .body(token)
 }

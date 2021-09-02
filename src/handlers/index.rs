@@ -1,5 +1,6 @@
 use actix_web::{web, HttpResponse, Responder};
 
+use crate::jwt;
 use crate::state::AppState;
 
 pub async fn index(state: web::Data<AppState>) -> impl Responder {
