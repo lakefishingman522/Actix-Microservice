@@ -1,0 +1,11 @@
+[package]
+name = "rust-sso"
+version = "0.1.0"
+authors = ["pmagaz <magazpablo@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+actix-web = "3.3.2"
+dotenv = "0.15.0"
+jwt = "0.14.0"
+serde = { version ="1"}
