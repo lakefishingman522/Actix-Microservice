@@ -8,7 +8,7 @@ use crate::user::User;
 
 pub async fn auth() -> impl Responder {
   let endpoint = env::var("IDENTITY_ENDPOINT").unwrap();
-  let user = request(&endpoint).await;
+  let user = request::<User>(&endpoint).await;
 
   let token = jwt::generate_token(user.unwrap());
 
