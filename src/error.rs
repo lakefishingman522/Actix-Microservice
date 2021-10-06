@@ -15,7 +15,7 @@ struct ErrorResponse {
 pub enum CustomError {
   #[error("Requested file was not found")]
   NotFound,
-  #[error("You ared forbidden to access requested file.")]
+  #[error("You ared forbidden to access this resource.")]
   Forbidden,
   #[error("Unknown Internal Error")]
   Unknown,

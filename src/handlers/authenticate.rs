@@ -46,12 +46,11 @@ pub async fn authenticate(
 
   let token = cookie.value();
   let claims = jwt::verify_token(&token).map_err(|_e| CustomError::WrongToken)?;
-  let uuid = Uuid::parse_str(&claims["_id"]).unwrap();
+  let uuid = Uuid::parse_str(&claims["_id"]).map_err(|_e| CustomError::WrongToken)?;
   let user = db
     .find_one::<User>(&uuid)
     .await
     .map_err(|_e| CustomError::NoUserFound)?;
-  println!("222222{:?}", user.data.email);
 
   //let cookie = get_cookie_string_from_header(request);
   Ok(HttpResponse::Ok().body(""))
