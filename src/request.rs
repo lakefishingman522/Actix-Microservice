@@ -1,14 +1,16 @@
 use actix_web::client::{Client, ClientResponse, JsonPayloadError, PayloadError};
+use actix_web::web;
+use reddb::Document;
 use serde::{Deserialize, Serialize};
 
-pub async fn request<T>(endpoint: &str) -> Result<T, JsonPayloadError>
+pub async fn request<T, R>(endpoint: &str, data: web::Json<T>) -> Result<R, JsonPayloadError>
 where
   for<'de> T: Serialize + Deserialize<'de>,
+  for<'de> R: Serialize + Deserialize<'de>,
 {
   Client::default()
-    .get(endpoint)
-    .header("User-Agent", "Actix-web")
-    .send()
+    .post(endpoint)
+    .send_json(&data.into_inner())
     .await
     .unwrap()
     .json()
