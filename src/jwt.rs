@@ -1,7 +1,9 @@
 use hmac::{Hmac, NewMac};
 use jwt::{SignWithKey, VerifyWithKey};
+use reddb::Document;
 use sha2::Sha256;
 use std::collections::BTreeMap;
+use std::io::Result;
 
 use crate::user::User;
 use dotenv::dotenv;
@@ -14,15 +16,16 @@ fn get_key() -> Hmac<Sha256> {
   key
 }
 
-pub fn generate_token(user: User) -> String {
+pub fn generate_token(doc: Document<User>) -> String {
   let key = get_key();
   let mut claims = BTreeMap::new();
-  claims.insert("email", user.email);
+  claims.insert("email", doc.data.email);
+  claims.insert("_id", doc._id.to_string());
   claims.sign_with_key(&key).unwrap()
 }
 
-pub fn verify_token(token_str: &str) -> BTreeMap<String, String> {
+pub fn verify_token(token_str: &str) -> Result<BTreeMap<String, String>> {
   let key = get_key();
-  let claims: BTreeMap<String, String> = token_str.verify_with_key(&key).unwrap();
-  claims
+  let claims = token_str.verify_with_key(&key).unwrap();
+  Ok(claims)
 }

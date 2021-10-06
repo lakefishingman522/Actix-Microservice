@@ -22,7 +22,7 @@ pub async fn login(req: web::Json<User>) -> impl Responder {
     .await
     .unwrap();
 
-  let token = jwt::generate_token(doc.data);
+  let token = jwt::generate_token(doc.clone());
   let cookie = cookie::create_cookie("cookie_test".to_owned(), token.clone());
 
   let mut response = HttpResponse::Ok().json(Response {

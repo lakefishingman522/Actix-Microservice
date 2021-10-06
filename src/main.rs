@@ -3,6 +3,7 @@ use dotenv::dotenv;
 use reddb::RonDb;
 
 mod cookie;
+mod error;
 mod handlers;
 mod jwt;
 mod request;
