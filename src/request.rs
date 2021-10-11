@@ -1,6 +1,5 @@
 use actix_web::client::{Client, ClientResponse, JsonPayloadError, PayloadError};
 use actix_web::web;
-use reddb::Document;
 use serde::{Deserialize, Serialize};
 
 pub async fn request<T, R>(endpoint: &str, data: web::Json<T>) -> Result<R, JsonPayloadError>
