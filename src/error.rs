@@ -1,7 +1,7 @@
 use actix_web::{
   error::ResponseError, http::StatusCode, web, HttpRequest, HttpResponse, Responder,
 };
-use serde::{Deserialize, Serialize};
+use serde::{Serialize};
 use thiserror::Error;
 
 #[derive(Serialize)]

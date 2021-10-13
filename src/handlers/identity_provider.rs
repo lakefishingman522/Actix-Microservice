@@ -1,7 +1,7 @@
 use crate::error::CustomError;
 use crate::state::AppState;
 use crate::user::User;
-use actix_web::{web, HttpResponse, Responder};
+use actix_web::{web, HttpResponse};
 pub async fn find_user(
   data: web::Json<User>,
   state: web::Data<AppState>,

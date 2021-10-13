@@ -1,9 +1,9 @@
 use actix_http::cookie::Cookie;
-use actix_http::error::BlockingError::Error;
+
 use actix_web::{cookie, web, HttpMessage, HttpRequest, HttpResponse, Responder};
 use std::io::Result;
 
-use crate::error::CustomError;
+
 
 pub fn create_cookie(name: String, value: String) -> Cookie<'static> {
   Cookie::build(name, value)

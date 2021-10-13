@@ -1,8 +1,8 @@
-use crate::jwt;
-use actix_web::{web, HttpResponse, Responder};
 
-use super::authenticate::Params;
-use crate::cookie;
+use actix_web::{web, HttpResponse};
+
+
+
 use crate::error::CustomError;
 use crate::request::request;
 use crate::state::AppState;
@@ -26,7 +26,7 @@ pub struct FormParams {
 
 pub async fn signin(
   form: web::Form<FormParams>,
-  state: web::Data<AppState>,
+  _state: web::Data<AppState>,
 ) -> Result<HttpResponse, CustomError> {
   let auth_endpoint = env::var("IDENTITY_ENDPOINT").unwrap();
   let user_json = web::Json(User {

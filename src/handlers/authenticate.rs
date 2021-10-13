@@ -1,17 +1,17 @@
-use crate::error::map_io_error;
+
 
 use crate::error::CustomError;
-use crate::jwt;
-use crate::state::AppState;
-use crate::user::User;
-use actix_http::cookie::Cookie;
+
+
+
+
 use actix_web::{
   dev::HttpResponseBuilder, error, error::ResponseError, get, http::header, http::StatusCode, web,
   HttpMessage, HttpRequest, HttpResponse, Responder,
 };
 use askama_actix::{Template, TemplateIntoResponse};
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Params {
