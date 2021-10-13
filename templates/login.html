@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Log in</title>
+</head>
+<body>
+  <p>Log in</p>
+  <form action="/login" method="post" enctype="application/x-www-form-urlencoded">
+    <p>Username:</p>
+    <input type="text" name="username" value="magazpablo@gmail.com">
+    <p>Password:</p>
+    <input type="Password" name="password" value="1234">
+    <input type="hidden" name="client_id" value="{{client_id}}">
+    <input type="hidden" name="redirect_url" value="{{redirect_url}}">
+    <p>
+      <input type="submit" value="Sign in">
+    </p>
+  </form>
+</body>
+</html>
