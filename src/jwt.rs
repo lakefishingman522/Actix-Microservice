@@ -19,7 +19,7 @@ fn get_key() -> Hmac<Sha256> {
 pub fn generate_token(doc: Document<User>) -> String {
   let key = get_key();
   let mut claims = BTreeMap::new();
-  claims.insert("email", doc.data.email);
+  claims.insert("username", doc.data.username);
   claims.insert("_id", doc._id.to_string());
   claims.sign_with_key(&key).unwrap()
 }

@@ -13,7 +13,7 @@ struct ErrorResponse {
 
 #[derive(Error, Debug)]
 pub enum CustomError {
-  #[error("Requested file was not found")]
+  #[error("Requested user was not found")]
   NotFound,
   #[error("You ared forbidden to access this resource.")]
   Forbidden,

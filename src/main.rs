@@ -8,12 +8,13 @@ mod handlers;
 mod jwt;
 mod request;
 mod state;
+//mod templates;
 mod user;
 
-use handlers::authenticate::authenticate;
+use handlers::authenticate::auth;
 use handlers::identity_provider::find_user;
 use handlers::index::index;
-use handlers::login::login;
+use handlers::signin::signin;
 use state::AppState;
 use std::io::Result;
 use user::User;
@@ -28,10 +29,10 @@ async fn main() -> Result<()> {
                 db: RonDb::new::<User>("users.db").unwrap(),
             })
             .wrap(Logger::default())
-            .route("/", web::get().to(index))
-            .route("/login", web::post().to(login))
+            .service(index)
+            .route("/auth", web::get().to(auth))
+            .route("/signin", web::post().to(signin))
             .route("/identity", web::post().to(find_user))
-            .route("/authenticate", web::get().to(authenticate))
     })
     .bind("0.0.0.0:8000")?
     .run()
