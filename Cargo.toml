@@ -16,6 +16,8 @@ cookie = "0.15.1"
 uuid = "0.8.1"
 reddb = { version = "0.2.3", features = ["ron_ser"]}
 serde = { version ="1" }
+serde_qs ="0.8.5"
+chrono = "0.4.19"
 serde_json = { version ="1"}
 derive-error = "0.0.5"
 thiserror = "1.0"

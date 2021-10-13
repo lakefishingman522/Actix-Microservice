@@ -1,4 +1,4 @@
-use actix_web::client::{Client, ClientResponse, JsonPayloadError, PayloadError};
+use actix_web::client::{Client, JsonPayloadError};
 use actix_web::web;
 use serde::{Deserialize, Serialize};
 

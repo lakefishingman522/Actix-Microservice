@@ -5,19 +5,19 @@ use reddb::RonDb;
 mod cookie;
 mod error;
 mod handlers;
-mod jwt;
+mod models;
 mod request;
 mod state;
-//mod templates;
-mod user;
+mod token;
 
 use handlers::authenticate::auth;
 use handlers::identity_provider::find_user;
 use handlers::index::index;
-use handlers::signin::signin;
+use handlers::local_server::local_server;
+use handlers::login::login;
+use models::User;
 use state::AppState;
 use std::io::Result;
-use user::User;
 
 #[actix_web::main]
 async fn main() -> Result<()> {
@@ -27,11 +27,13 @@ async fn main() -> Result<()> {
             .data(AppState {
                 app_name: String::from("Rust SSO"),
                 db: RonDb::new::<User>("users.db").unwrap(),
+                private_key: token::get_key(),
             })
             .wrap(Logger::default())
             .service(index)
+            .service(local_server)
             .route("/auth", web::get().to(auth))
-            .route("/signin", web::post().to(signin))
+            .route("/login", web::post().to(login))
             .route("/identity", web::post().to(find_user))
     })
     .bind("0.0.0.0:8000")?

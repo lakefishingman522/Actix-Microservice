@@ -1,9 +1,7 @@
 use actix_http::cookie::Cookie;
 
-use actix_web::{cookie, web, HttpMessage, HttpRequest, HttpResponse, Responder};
+use actix_web::{HttpMessage, HttpRequest};
 use std::io::Result;
-
-
 
 pub fn create_cookie(name: String, value: String) -> Cookie<'static> {
   Cookie::build(name, value)
