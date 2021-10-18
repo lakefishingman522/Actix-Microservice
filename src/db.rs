@@ -1,7 +1,8 @@
 use mongodb::{bson::doc, error::Error, options::ClientOptions, Client};
+use std::env;
 
 pub async fn db_connect() -> Result<Client, Error> {
-  let client_options =
+  let client_options = ClientOptions::parse(&env::var("MONGO_DB_URI").unwrap()).await?;
   let client = Client::with_options(client_options)?;
   client
     .database("db_users")

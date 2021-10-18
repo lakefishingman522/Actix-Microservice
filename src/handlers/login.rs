@@ -1,7 +1,7 @@
 use actix_http::http::uri;
 use actix_web::{web, HttpResponse};
+use bson::oid::ObjectId;
 use chrono::{DateTime, Utc};
-use reddb::Document;
 use serde_qs;
 use std::env;
 
@@ -18,10 +18,12 @@ pub async fn login(
 ) -> Result<HttpResponse, CustomError> {
   let auth_endpoint = env::var("IDENTITY_ENDPOINT").unwrap();
   let user_json = web::Json(User {
+    _id: ObjectId::new(),
     username: form.username.clone(),
+    email: "".to_owned(),
     password: form.password.clone(),
   });
-  let doc = request::<User, Document<User>>(&auth_endpoint, user_json)
+  let user = request::<User>(&auth_endpoint, user_json)
     .await
     .map_err(|_e| CustomError::NotFound)?;
 
@@ -44,9 +46,9 @@ pub async fn login(
     IdToken {
       aud: form.client_id.clone(),
       azp: form.client_id.clone(),
-      at_hash: doc._id.to_string(),
-      sub: doc._id.to_string(),
-      email: doc.data.username,
+      at_hash: user._id.to_string(),
+      sub: user._id.to_string(),
+      email: user.username,
     },
   );
 

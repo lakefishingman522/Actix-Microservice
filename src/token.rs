@@ -3,7 +3,6 @@ use chrono::{DateTime, Utc};
 use dotenv::dotenv;
 use hmac::{Hmac, NewMac};
 use jwt::{SignWithKey, VerifyWithKey};
-use reddb::Document;
 use serde::{Deserialize, Serialize};
 use sha2::Sha256;
 use std::collections::BTreeMap;

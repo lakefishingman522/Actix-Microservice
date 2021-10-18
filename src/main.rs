@@ -1,6 +1,5 @@
 use actix_web::{middleware::Logger, web, App, HttpServer};
 use dotenv::dotenv;
-use reddb::RonDb;
 
 mod cookie;
 mod db;
@@ -30,8 +29,7 @@ async fn main() -> Result<()> {
         App::new()
             .data(AppState {
                 app_name: String::from("Rust SSO"),
-                db: RonDb::new::<User>("users.db").unwrap(),
-                db2: mongodb.clone(),
+                db: mongodb.clone(),
                 private_key: token::get_key(),
             })
             .wrap(Logger::default())

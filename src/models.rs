@@ -1,9 +1,13 @@
+use bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
-
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct User {
   #[serde(default)]
+  pub _id: ObjectId,
+  #[serde(default)]
   pub username: String,
+  #[serde(default)]
+  pub email: String,
   #[serde(default)]
   pub password: String,
 }
