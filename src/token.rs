@@ -19,32 +19,27 @@ pub fn get_key() -> Hmac<Sha256> {
   key
 }
 
-pub fn generate_token<T>(key: &Hmac<Sha256>, payload: T) -> String
-where
-  for<'de> T: Serialize + Deserialize<'de>,
-{
-  let mut token = BTreeMap::new();
-  token.insert("payload", payload);
-  token.sign_with_key(key).unwrap()
-}
+// pub fn sing_token<T>(key: &Hmac<Sha256>, token: T) -> String
+// where
+//   for<'de> T: Serialize + Deserialize<'de>,
+// {
+//   token.sign_with_key(key).unwrap()
+// }
 
-pub fn generate_access_token(key: &Hmac<Sha256>) -> String {
-  let payload = AccessToken {
-    iss: env::var("ISSUER").unwrap(),
-    exp: Utc::now().to_string(),
-  };
-  let mut token = BTreeMap::new();
-  token.insert("payload", payload);
-  token.sign_with_key(key).unwrap()
-}
-
-pub fn generate_id_token(key: &Hmac<Sha256>, doc: Document<User>) -> String {
+pub fn generate_access_token(key: &Hmac<Sha256>, token: AccessToken) -> String {
   let mut claims = BTreeMap::new();
-  let payload = IdToken {
-    _id: doc._id.to_string(),
-    username: doc.data.username,
-  };
-  claims.insert("payload", payload);
+  claims.insert("aud", token.iss);
+  claims.insert("email", token.exp);
+  claims.sign_with_key(key).unwrap()
+}
+
+pub fn generate_id_token(key: &Hmac<Sha256>, token: IdToken) -> String {
+  let mut claims = BTreeMap::new();
+  claims.insert("aud", token.aud);
+  claims.insert("azp", token.azp);
+  claims.insert("at_hash", token.at_hash);
+  claims.insert("sub", token.sub);
+  claims.insert("email", token.email);
   claims.sign_with_key(key).unwrap()
 }
 

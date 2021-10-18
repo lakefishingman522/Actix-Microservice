@@ -14,8 +14,7 @@ pub struct LocalTemplate<'a> {
   expires_in: &'a str,
 }
 
-#[get("/local/")]
-pub async fn local_server(query: web::Query<SignInResponse>) -> Result<HttpResponse, CustomError> {
+pub async fn callback(query: web::Query<SignInResponse>) -> Result<HttpResponse, CustomError> {
   Ok(
     HttpResponse::Ok().body(
       LocalTemplate {

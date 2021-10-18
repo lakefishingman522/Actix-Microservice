@@ -18,7 +18,6 @@ pub async fn login(
 ) -> Result<HttpResponse, CustomError> {
   let auth_endpoint = env::var("IDENTITY_ENDPOINT").unwrap();
   let user_json = web::Json(User {
-    _id: form.client_id.clone(),
     username: form.username.clone(),
     password: form.password.clone(),
   });
@@ -32,7 +31,7 @@ pub async fn login(
   };
 
   let private_key = state.private_key.clone();
-  let access_token = token::generate_token(
+  let access_token = token::generate_access_token(
     &private_key,
     AccessToken {
       iss: env::var("ISSUER").unwrap(),
@@ -40,11 +39,14 @@ pub async fn login(
     },
   );
 
-  let id_token = token::generate_token(
+  let id_token = token::generate_id_token(
     &private_key,
     IdToken {
-      _id: doc._id.to_string(),
-      username: doc.data.username,
+      aud: form.client_id.clone(),
+      azp: form.client_id.clone(),
+      at_hash: doc._id.to_string(),
+      sub: doc._id.to_string(),
+      email: doc.data.username,
     },
   );
 
@@ -53,6 +55,8 @@ pub async fn login(
     id_token: id_token.clone(),
     token_type: "JWT".to_owned(),
     expires_in: env::var("JWT_LIFE_SPAN").unwrap(),
+    scope: "".to_owned(),
+    refresh_token: "".to_owned(),
   };
 
   let query = serde_qs::to_string(&response);
@@ -62,12 +66,12 @@ pub async fn login(
     .build()
     .unwrap();
 
-  let access_cookie = cookie::create_cookie("access_token".to_owned(), access_token);
-  let id_cookie = cookie::create_cookie("id_token".to_owned(), id_token);
-  let mut response = HttpResponse::Found()
+  // let access_cookie = cookie::create_cookie("access_token".to_owned(), access_token);
+  // let id_cookie = cookie::create_cookie("id_token".to_owned(), id_token);
+  let response = HttpResponse::Found()
     .header("location", uri.to_string())
     .finish();
-  response.add_cookie(&access_cookie);
-  response.add_cookie(&id_cookie);
+  // response.add_cookie(&access_cookie);
+  // response.add_cookie(&id_cookie);
   Ok(response)
 }
