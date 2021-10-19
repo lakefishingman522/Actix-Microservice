@@ -1,10 +1,27 @@
-use crate::state::AppState;
-use crate::user::User;
-use actix_web::{web, HttpResponse, Responder};
+use actix_web::{web, HttpResponse};
 
-pub async fn find_user(data: web::Json<User>, state: web::Data<AppState>) -> impl Responder {
-  let db = &state.db;
-  let user = db.find(&data.into_inner()).await.unwrap();
-  let user_data = user.first().unwrap();
-  HttpResponse::Ok().json(user_data)
+use mongodb::{
+  bson::{doc, Document},
+  error::Error,
+  options::FindOptions,
+};
+
+use crate::error::CustomError;
+use crate::models::User;
+use crate::state::AppState;
+
+pub async fn find_user(
+  data: web::Json<User>,
+  state: web::Data<AppState>,
+) -> Result<HttpResponse, CustomError> {
+  let db = &state.db.database("db-users").collection::<User>("users");
+  let user = db
+    .find_one(doc! {"username": &data.username}, None)
+    .await
+    .map_err(|_e| CustomError::Forbidden)
+    .unwrap();
+
+  println!("User: {:?}", user);
+
+  Ok(HttpResponse::Ok().json(user))
 }

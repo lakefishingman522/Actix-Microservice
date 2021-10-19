@@ -1,7 +1,5 @@
-use actix_web::{
-  error::ResponseError, http::StatusCode, web, HttpRequest, HttpResponse, Responder,
-};
-use serde::{Deserialize, Serialize};
+use actix_web::{error::ResponseError, http::StatusCode, HttpResponse};
+use serde::Serialize;
 use thiserror::Error;
 
 #[derive(Serialize)]
@@ -13,7 +11,7 @@ struct ErrorResponse {
 
 #[derive(Error, Debug)]
 pub enum CustomError {
-  #[error("Requested file was not found")]
+  #[error("Requested user was not found")]
   NotFound,
   #[error("You ared forbidden to access this resource.")]
   Forbidden,
@@ -25,6 +23,8 @@ pub enum CustomError {
   WrongToken,
   #[error("No user found")]
   NoUserFound,
+  #[error("Can't connect to database")]
+  NoDbConnection,
 }
 
 impl CustomError {
@@ -36,9 +36,11 @@ impl CustomError {
       Self::NoCookie => "NoCookie".to_string(),
       Self::WrongToken => "WrongToken".to_string(),
       Self::NoUserFound => "NoUserFound".to_string(),
+      Self::NoDbConnection => "NoDbConnection".to_string(),
     }
   }
 }
+
 impl ResponseError for CustomError {
   fn status_code(&self) -> StatusCode {
     match *self {
@@ -48,6 +50,7 @@ impl ResponseError for CustomError {
       Self::NoCookie => StatusCode::FORBIDDEN,
       Self::WrongToken => StatusCode::FORBIDDEN,
       Self::NoUserFound => StatusCode::FORBIDDEN,
+      Self::NoDbConnection => StatusCode::INTERNAL_SERVER_ERROR,
     }
   }
 
