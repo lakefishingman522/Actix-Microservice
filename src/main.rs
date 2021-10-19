@@ -11,6 +11,7 @@ mod state;
 mod token;
 
 use db::db_connect;
+use error::CustomError;
 use handlers::authenticate::auth;
 use handlers::callback::callback;
 use handlers::discovery::discovery;
@@ -24,7 +25,12 @@ use std::io::Result;
 #[actix_web::main]
 async fn main() -> Result<()> {
     dotenv().ok();
-    let mongodb: mongodb::Client = db_connect().await.unwrap();
+
+    let mongodb: mongodb::Client = db_connect()
+        .await
+        .map_err(|_e| CustomError::NoDbConnection)
+        .unwrap();
+
     HttpServer::new(move || {
         App::new()
             .data(AppState {

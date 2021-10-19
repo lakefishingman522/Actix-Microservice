@@ -1,17 +1,19 @@
 use mongodb::{bson::doc, error::Error, options::ClientOptions, Client};
 use std::env;
 
-pub async fn db_connect() -> Result<Client, Error> {
-  let client_options = ClientOptions::parse(&env::var("MONGO_DB_URI").unwrap()).await?;
-  let client = Client::with_options(client_options)?;
+use crate::error::CustomError;
+
+pub async fn db_connect() -> Result<Client, CustomError> {
+  let client_options = ClientOptions::parse(&env::var("MONGO_DB_URI").unwrap())
+    .await
+    .unwrap();
+
+  let client = Client::with_options(client_options).unwrap();
   client
     .database("db_users")
     .run_command(doc! {"ping": 1}, None)
-    .await?;
-  println!("Connected successfully.");
-  // List the names of the databases in that cluster
-  for db_name in client.list_database_names(None, None).await? {
-    println!("{}", db_name);
-  }
+    .await
+    .map_err(|_e| CustomError::NoDbConnection)?;
+
   Ok(client)
 }
