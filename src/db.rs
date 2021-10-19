@@ -13,7 +13,6 @@ pub async fn db_connect() -> Result<Client, CustomError> {
     .database("db_users")
     .run_command(doc! {"ping": 1}, None)
     .await
-    .map_err(|_e| CustomError::NoDbConnection)?;
-
+    .unwrap();
   Ok(client)
 }

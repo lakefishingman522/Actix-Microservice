@@ -1,5 +1,7 @@
 use actix_web::{middleware::Logger, web, App, HttpServer};
 use dotenv::dotenv;
+#[macro_use]
+extern crate magic_crypt;
 
 mod cookie;
 mod db;
@@ -12,6 +14,7 @@ mod token;
 
 use db::db_connect;
 use error::CustomError;
+use handlers::api::api;
 use handlers::authenticate::auth;
 use handlers::callback::callback;
 use handlers::discovery::discovery;
@@ -41,6 +44,7 @@ async fn main() -> Result<()> {
             .wrap(Logger::default())
             .service(index)
             .service(web::scope("/local").route("/callback", web::get().to(callback)))
+            .service(web::scope("/local").route("/api", web::get().to(api)))
             .service(
                 web::scope("/oauth")
                     .route("/auth", web::get().to(auth))

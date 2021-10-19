@@ -11,6 +11,7 @@ pub struct AuthFormTemplate<'a> {
   response_type: &'a str,
   client_id: &'a str,
   redirect_url: &'a str,
+  state: &'a str,
 }
 
 pub async fn auth(query: web::Query<Params>) -> Result<HttpResponse, CustomError> {
@@ -20,6 +21,7 @@ pub async fn auth(query: web::Query<Params>) -> Result<HttpResponse, CustomError
         response_type: &query.response_type,
         client_id: &query.client_id,
         redirect_url: &query.redirect_url,
+        state: &query.state,
       }
       .render()
       .unwrap(),

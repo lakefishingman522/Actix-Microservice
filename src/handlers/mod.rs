@@ -1,3 +1,4 @@
+pub mod api;
 pub mod authenticate;
 pub mod callback;
 pub mod discovery;

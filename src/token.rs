@@ -3,7 +3,10 @@ use chrono::{DateTime, Utc};
 use dotenv::dotenv;
 use hmac::{Hmac, NewMac};
 use jwt::{SignWithKey, VerifyWithKey};
+
+use magic_crypt::MagicCryptTrait;
 use serde::{Deserialize, Serialize};
+
 use sha2::Sha256;
 use std::collections::BTreeMap;
 use std::env;
@@ -24,6 +27,12 @@ pub fn get_key() -> Hmac<Sha256> {
 // {
 //   token.sign_with_key(key).unwrap()
 // }
+
+pub fn generate_access_code(key: &str) -> String {
+  let mc = new_magic_crypt!("private_key", 256);
+  let base64 = mc.encrypt_str_to_base64(key);
+  base64
+}
 
 pub fn generate_access_token(key: &Hmac<Sha256>, token: AccessToken) -> String {
   let mut claims = BTreeMap::new();
