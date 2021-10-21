@@ -21,13 +21,6 @@ pub fn get_key() -> Hmac<Sha256> {
   key
 }
 
-// pub fn sing_token<T>(key: &Hmac<Sha256>, token: T) -> String
-// where
-//   for<'de> T: Serialize + Deserialize<'de>,
-// {
-//   token.sign_with_key(key).unwrap()
-// }
-
 pub fn generate_access_code(key: &str) -> String {
   let mc = new_magic_crypt!("private_key", 256);
   let base64 = mc.encrypt_str_to_base64(key);

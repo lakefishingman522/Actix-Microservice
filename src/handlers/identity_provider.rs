@@ -15,6 +15,8 @@ pub async fn find_user(
   state: web::Data<AppState>,
 ) -> Result<HttpResponse, CustomError> {
   let db = &state.db.database("auth-db").collection::<User>("users");
+  println!("[Identity] Username: {:?}", &data.username);
+
   let user = db
     .find_one(doc! {"username": &data.username}, None)
     .await

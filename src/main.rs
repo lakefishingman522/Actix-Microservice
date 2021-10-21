@@ -15,13 +15,14 @@ mod token;
 use db::db_connect;
 use error::CustomError;
 use handlers::api::api;
-use handlers::authenticate::auth;
+use handlers::authenticate::authenticate;
 use handlers::callback::callback;
 use handlers::discovery::discovery;
 use handlers::identity_provider::find_user;
 use handlers::index::index;
 use handlers::login::login;
-use models::User;
+use handlers::token::token;
+use handlers::token_pass::token_pass;
 use state::AppState;
 use std::io::Result;
 
@@ -43,17 +44,22 @@ async fn main() -> Result<()> {
             })
             .wrap(Logger::default())
             .service(index)
-            .service(web::scope("/local").route("/callback", web::get().to(callback)))
-            .service(web::scope("/local").route("/api", web::get().to(api)))
+            .service(
+                web::scope("/local")
+                    .route("/callback", web::get().to(callback))
+                    .route("/api", web::post().to(api)),
+            )
             .service(
                 web::scope("/oauth")
-                    .route("/auth", web::get().to(auth))
+                    .route("/auth", web::post().to(authenticate))
+                    .route("/token", web::post().to(token))
+                    .route("/tokenpass", web::post().to(token_pass))
+                    .route("/identity", web::post().to(find_user))
+                    .route("/login", web::get().to(login))
                     .route(
                         "/.well-known/openid-configuration",
                         web::get().to(discovery),
-                    )
-                    .route("/identity", web::post().to(find_user))
-                    .route("/login", web::post().to(login)),
+                    ),
             )
     })
     .bind("0.0.0.0:8000")?

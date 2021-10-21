@@ -1,30 +1,34 @@
-use actix_web::{get, web, HttpResponse};
-use askama_actix::Template;
-
 use crate::error::CustomError;
-use crate::models::SignInResponse;
+use crate::models::{AccessCode, TokenReq, TokenResponse};
+use actix_web::{get, web, HttpResponse};
+use std::env;
 
-#[derive(Template)]
-#[template(path = "local.html")]
+use crate::cookie;
+use crate::request::request;
 
-pub struct LocalTemplate<'a> {
-  access_token: &'a str,
-  id_token: &'a str,
-  token_type: &'a str,
-  expires_in: &'a str,
-}
+pub async fn callback(query: web::Query<AccessCode>) -> Result<HttpResponse, CustomError> {
+  let token_endpoint = env::var("TOKEN_ENDPOINT").unwrap();
 
-pub async fn callback(query: web::Query<SignInResponse>) -> Result<HttpResponse, CustomError> {
-  Ok(
-    HttpResponse::Ok().body(
-      LocalTemplate {
-        access_token: &query.access_token,
-        id_token: &query.id_token,
-        token_type: &query.token_type,
-        expires_in: &query.expires_in,
-      }
-      .render()
-      .unwrap(),
-    ),
-  )
+  let data = web::Json(TokenReq {
+    grant_type: "authorization_code".to_owned(),
+    access_code: query.access_code.clone(),
+    redirect_url: env::var("REDIRECT_URL").unwrap(),
+  });
+
+  println!("Request to token with {:?}", data.clone());
+
+  let token_response = request::<TokenReq, TokenResponse>(&token_endpoint, data)
+    .await
+    .unwrap();
+
+  let access_cookie = cookie::create_cookie(
+    "access_token".to_owned(),
+    token_response.access_token.clone(),
+  );
+  let id_cookie = cookie::create_cookie("id_token".to_owned(), token_response.access_token.clone());
+
+  let mut response = HttpResponse::Ok().json(token_response);
+  response.add_cookie(&access_cookie);
+  response.add_cookie(&id_cookie);
+  Ok(response)
 }
