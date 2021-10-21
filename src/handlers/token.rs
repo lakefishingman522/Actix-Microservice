@@ -61,7 +61,7 @@ pub async fn token(
   let response = TokenResponse {
     access_token: access_token.clone(),
     id_token: id_token.clone(),
-    token_type: "Bearer".to_owned(),
+    token_type: "".to_owned(),
     expires_in: env::var("JWT_LIFE_SPAN").unwrap(),
     scope: "".to_owned(),
     refresh_token: "".to_owned(),

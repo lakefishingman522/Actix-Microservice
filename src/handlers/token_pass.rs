@@ -35,6 +35,23 @@ pub async fn token_pass(
 
   let private_key = &state.private_key;
 
+  let db = &state.db.database("auth-db").collection("tokens");
+
+  let _insert_result = db
+    .insert_one(
+      doc! {
+         "access_code": "".to_owned(),
+         "username": &user.username,
+         "user_id": &user._id,
+         "client_id": &data.client_id,
+         "expires": &Utc::now().to_rfc2822()
+      },
+      None,
+    )
+    .await
+    .map_err(|_e| CustomError::Unknown)
+    .unwrap();
+
   let access_token = generate_access_token(
     &private_key,
     AccessToken {

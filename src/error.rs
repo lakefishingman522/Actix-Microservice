@@ -17,14 +17,12 @@ pub enum CustomError {
   Forbidden,
   #[error("Unknown Internal Error")]
   Unknown,
-  #[error("No Cookie was found")]
-  NoCookie,
-  #[error("Wrong Token")]
-  WrongToken,
   #[error("No user found")]
   NoUserFound,
   #[error("Can't connect to database")]
   NoDbConnection,
+  #[error("Invalid Token")]
+  InvalidToken,
 }
 
 impl CustomError {
@@ -33,10 +31,9 @@ impl CustomError {
       Self::NotFound => "NotFound".to_string(),
       Self::Forbidden => "Forbidden".to_string(),
       Self::Unknown => "Unknown".to_string(),
-      Self::NoCookie => "NoCookie".to_string(),
-      Self::WrongToken => "WrongToken".to_string(),
       Self::NoUserFound => "NoUserFound".to_string(),
       Self::NoDbConnection => "NoDbConnection".to_string(),
+      Self::InvalidToken => "InvalidToken".to_string(),
     }
   }
 }
@@ -47,10 +44,9 @@ impl ResponseError for CustomError {
       Self::NotFound => StatusCode::NOT_FOUND,
       Self::Forbidden => StatusCode::FORBIDDEN,
       Self::Unknown => StatusCode::INTERNAL_SERVER_ERROR,
-      Self::NoCookie => StatusCode::FORBIDDEN,
-      Self::WrongToken => StatusCode::FORBIDDEN,
       Self::NoUserFound => StatusCode::FORBIDDEN,
       Self::NoDbConnection => StatusCode::INTERNAL_SERVER_ERROR,
+      Self::InvalidToken => StatusCode::UNAUTHORIZED,
     }
   }
 

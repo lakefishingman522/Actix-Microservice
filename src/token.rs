@@ -30,7 +30,9 @@ pub fn generate_access_code(key: &str) -> String {
 pub fn generate_access_token(key: &Hmac<Sha256>, token: AccessToken) -> String {
   let mut claims = BTreeMap::new();
   claims.insert("aud", token.iss);
-  claims.insert("email", token.exp);
+  claims.insert("exp", token.exp);
+  claims.insert("sub", token.sub);
+  claims.insert("azp", token.azp);
   claims.sign_with_key(key).unwrap()
 }
 
@@ -44,7 +46,7 @@ pub fn generate_id_token(key: &Hmac<Sha256>, token: IdToken) -> String {
   claims.sign_with_key(key).unwrap()
 }
 
-pub fn verify_token(token_str: &str) -> Result<BTreeMap<String, String>> {
+pub fn decode_token(token_str: &str) -> Result<BTreeMap<String, String>> {
   let key = get_key();
   let claims = token_str.verify_with_key(&key).unwrap();
   Ok(claims)
