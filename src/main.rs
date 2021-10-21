@@ -1,6 +1,4 @@
 use actix_web::{middleware::Logger, web, App, HttpServer};
-use actix_web_httpauth::extractors::basic::{BasicAuth, Config};
-use actix_web_httpauth::extractors::AuthenticationError;
 use actix_web_httpauth::middleware::HttpAuthentication;
 use dotenv::dotenv;
 use std::io::Result;
