@@ -42,17 +42,17 @@ async fn main() -> Result<()> {
     HttpServer::new(move || {
         App::new()
             .data(AppState {
-                app_name: String::from("Rust SSO"),
+                app_name: String::from("Rust Auth provider"),
                 db: mongodb.clone(),
                 private_key: token::get_key(),
             })
             .wrap(Logger::default())
             .service(index)
+            .route("/callback", web::get().to(callback))
             .service(
-                web::scope("/local")
+                web::scope("/api")
                     .wrap(HttpAuthentication::bearer(bearer_auth_validator))
-                    .route("/callback", web::get().to(callback))
-                    .route("/api", web::post().to(api)),
+                    .route("/resource", web::post().to(api)),
             )
             .service(
                 web::scope("/oauth")
