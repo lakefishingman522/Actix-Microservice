@@ -1,33 +1,5 @@
-[package]
-name = "rust-sso"
-version = "0.1.0"
-authors = ["pmagaz <magazpablo@gmail.com>"]
-edition = "2018"
-
-[dependencies]
-actix-web = "3.3.2"
-actix-http = "2.2.1"
-actix-rt = "2.2.0"
-actix-web-httpauth = "0.5.1"
-dotenv = "0.15.0"
-jwt = "0.15.0"
-hmac = "0.11.0"
-sha2 = "0.9.6"
-cookie = "0.15.1"
-serde = { version ="1" }
-serde_qs ="0.8.5"
-chrono = "0.4.19"
-serde_json = { version ="1"}
-derive-error = "0.0.5"
-thiserror = "1.0"
-derive_more = "0.99.16"
-askama = "0.10.5"
-askama_actix = "0.11.1"
-bson = "2"
-magic-crypt = "3.1.9"
-
-[dependencies.mongodb]
-version = "2"
-default-features = false
-features = ["async-std-runtime"]
-futures = "0.3"
+[workspace]
+members = [
+    "rs-auth-service",
+    "rs-api-service",
+]

@@ -1,0 +1,3 @@
+# auth-service
+
+DEVELOPMENT TESTS
