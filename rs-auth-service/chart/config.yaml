@@ -1,0 +1,7 @@
+APP_PORT: "8000"
+APP_NAME: "Rust Auth Server"
+ISSUER: "rs-auth-service"
+JWT_LIFE_SPAN: "1800"
+IDENTITY_ENDPOINT: "http://rs-auth-service/oauth/identity"
+TOKEN_ENDPOINT: "http://rs-auth-service/oauth/token"
+REDIRECT_URL: "http://rs-auth-api/api/callback?"
