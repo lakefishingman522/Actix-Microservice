@@ -47,6 +47,13 @@ ingress:
             name: rs-auth-service 
             port:
               number: 80 
+      - path: /metrics
+        pathType: Prefix
+        backend:
+          service:
+            name: rs-auth-service 
+            port:
+              number: 80 
   tls: []
 
 resources: {}
