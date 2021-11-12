@@ -4,12 +4,12 @@ RUN rustup target add aarch64-unknown-linux-musl
 RUN USER=root cargo new --bin rs-api-service
 WORKDIR ./rs-api-service
 COPY Cargo.toml Cargo.lock ./
+COPY templates ./templates
 RUN cargo build --release 
 RUN rm src/*.rs
 
 ADD . ./
 RUN rm ./target/aarch64-unknown-linux-musl/release/deps/rs_api_service*
-COPY templates ./templates
 RUN cargo build --release 
 
 #IMAGE 

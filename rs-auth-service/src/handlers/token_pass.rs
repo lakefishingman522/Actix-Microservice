@@ -6,6 +6,7 @@ use mongodb::bson::doc;
 use std::env;
 
 use crate::error::CustomError;
+use crate::metrics;
 use crate::models::{AccessToken, IdToken, TokenPassReq, TokenResponse, User};
 use crate::request::request;
 use crate::state::AppState;
@@ -16,7 +17,6 @@ pub async fn token_pass(
   state: web::Data<AppState>,
 ) -> Result<HttpResponse, CustomError> {
   println!("[Token Pass]");
-
   let user_data = web::Json(User {
     _id: ObjectId::new(),
     username: data.username.clone(),
@@ -24,12 +24,13 @@ pub async fn token_pass(
     password: data.password.clone(),
   });
 
+  println!("[Token Pass] User Data: {:?}", user_data.clone());
+
   let user = request::<User, User>(&env::var("IDENTITY_ENDPOINT").unwrap(), user_data)
     .await
-    .map_err(|_e| CustomError::NotFound)?;
+    .unwrap();
 
-  println!("[Token Pass] User: {:?}", user.clone());
-  // FIXME independet endpoint
+  println!("[Token Pass] Identity User: {:?}", user.clone());
 
   let private_key = &state.private_key;
 
@@ -47,7 +48,6 @@ pub async fn token_pass(
       None,
     )
     .await
-    .map_err(|_e| CustomError::Unknown)
     .unwrap();
 
   let access_token = generate_access_token(

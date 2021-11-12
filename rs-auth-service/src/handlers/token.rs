@@ -4,6 +4,7 @@ use mongodb::bson::doc;
 use std::env;
 
 use crate::error::CustomError;
+use crate::metrics;
 use crate::models::{AccessCode, AccessToken, IdToken, SearchUser, TokenReq, TokenResponse, User};
 use crate::request::request;
 use crate::state::AppState;
@@ -13,6 +14,8 @@ pub async fn token(
   data: web::Json<TokenReq>,
   state: web::Data<AppState>,
 ) -> Result<HttpResponse, CustomError> {
+  println!("[Token]");
+
   let db = &state.db.database("auth-db");
 
   let access_code = &db

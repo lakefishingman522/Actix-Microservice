@@ -2,6 +2,7 @@ use actix_web::{web, HttpResponse};
 use askama_actix::Template;
 
 use crate::error::CustomError;
+use crate::metrics;
 use crate::models::Params;
 
 #[derive(Template)]

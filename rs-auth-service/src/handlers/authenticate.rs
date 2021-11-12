@@ -9,6 +9,7 @@ use serde_qs;
 use std::env;
 
 use crate::error::CustomError;
+use crate::metrics;
 use crate::models::{AuthCodeResponse, FormParams, User};
 use crate::request::request;
 use crate::state::AppState;
@@ -18,6 +19,8 @@ pub async fn authenticate(
   form: web::Form<FormParams>,
   state: web::Data<AppState>,
 ) -> Result<HttpResponse, CustomError> {
+  let metric_families = prometheus::gather();
+
   let auth_endpoint = env::var("IDENTITY_ENDPOINT").unwrap();
 
   let data = web::Json(User {
@@ -55,7 +58,6 @@ pub async fn authenticate(
       None,
     )
     .await
-    .map_err(|_e| CustomError::Unknown)
     .unwrap();
 
   let response = AuthCodeResponse {

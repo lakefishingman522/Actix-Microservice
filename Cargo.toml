@@ -2,4 +2,5 @@
 members = [
     "rs-auth-service",
     "rs-api-service",
+    "rs-cpu-service",
 ]
