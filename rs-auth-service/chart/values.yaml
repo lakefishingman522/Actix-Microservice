@@ -1,4 +1,4 @@
-replicaCount: 1
+replicaCount: 2
 
 image:
   repository: pmagaz/rs-auth-service 
@@ -24,6 +24,10 @@ service:
   type: ClusterIP
   port: 80
   targetPort: 8000
+  metadata:
+    name: rs-auth-service
+    labels:
+      app: rs-auth-service
 
 ingress:
   enabled: true
@@ -41,13 +45,6 @@ ingress:
             port:
               number: 80 
       - path: /oauth
-        pathType: Prefix
-        backend:
-          service:
-            name: rs-auth-service 
-            port:
-              number: 80 
-      - path: /metrics
         pathType: Prefix
         backend:
           service:

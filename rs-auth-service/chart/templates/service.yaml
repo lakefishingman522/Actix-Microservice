@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: {{ include "rs-auth-service.fullname" . }}
   labels:
+    app: {{ .Values.service.metadata.labels.app }}
     {{- include "rs-auth-service.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
