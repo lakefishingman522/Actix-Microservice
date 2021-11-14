@@ -34,7 +34,6 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/enable-cors: "true"
-    kubernetes.io/proxy-read-timeout: "3600"
   hosts:
     - host: cluster.local
       paths:
