@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: pmagaz/rs-api-service 
-  pullPolicy: Always 
+  pullPolicy: IfNotPresent 
   tag: "latest"
 
 envSecretName: rust-auth-secrets
