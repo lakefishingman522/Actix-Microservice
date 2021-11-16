@@ -1,5 +1,5 @@
 [package]
-name = "rs-auth-service"
+name = "rs_cpu_service"
 version = "0.1.0"
 authors = ["pmagaz <magazpablo@gmail.com>"]
 edition = "2018"

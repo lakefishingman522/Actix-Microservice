@@ -1,5 +1,6 @@
 use actix_web::{middleware::Logger, web, App, HttpServer};
 use actix_web_httpauth::middleware::HttpAuthentication;
+use dotenv::dotenv;
 use std::io::Result;
 
 #[macro_use]
@@ -26,6 +27,7 @@ use std::env;
 
 #[actix_web::main]
 async fn main() -> Result<()> {
+    dotenv().ok();
     let port = env::var("APP_PORT").unwrap();
     let app_name = env::var("APP_NAME").unwrap();
     let mongodb: mongodb::Client = db_connect()

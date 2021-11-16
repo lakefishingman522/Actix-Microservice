@@ -1,5 +1,5 @@
 [package]
-name = "rs-api-service"
+name = "rs_auth_service"
 version = "0.1.0"
 authors = ["pmagaz <magazpablo@gmail.com>"]
 edition = "2018"
@@ -20,7 +20,11 @@ thiserror = "1.0"
 askama = "0.10.5"
 askama_actix = "0.11.1"
 bson = "2"
+dotenv = "0.15"
 magic-crypt = "3.1.9"
+prometheus = { version = "0.13", features = ["process"] }
+lazy_static = "1.4"
+futures = "0.3.17"
 
 [dependencies.mongodb]
 version = "2"

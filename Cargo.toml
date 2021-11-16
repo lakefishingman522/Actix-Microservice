@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "rs-auth-service",
-    "rs-api-service",
-    "rs-cpu-service",
+    "rs_auth_service",
+    "rs_api_service",
+    "rs_cpu_service",
 ]

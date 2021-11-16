@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: pmagaz/rs-api-service 
-  pullPolicy: IfNotPresent 
+  repository: pmagaz/rs-auth-service 
+  pullPolicy: Always 
   tag: "latest"
 
 envSecretName: rust-auth-secrets
@@ -24,6 +24,10 @@ service:
   type: ClusterIP
   port: 80
   targetPort: 8000
+  metadata:
+    name: rs-auth-service
+    labels:
+      app: rs-auth-service
 
 ingress:
   enabled: true
@@ -33,31 +37,34 @@ ingress:
   hosts:
     - host: cluster.local
       paths:
-      - path: /api
+      - path: /
         pathType: Prefix
         backend:
           service:
-            name: rs-api-service 
+            name: rs-auth-service 
+            port:
+              number: 80 
+      - path: /oauth
+        pathType: Prefix
+        backend:
+          service:
+            name: rs-auth-service 
             port:
               number: 80 
   tls: []
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  #requests:
+  #  cpu: 100m
+  #memory: 128Mi
+  #limits:
+  #  cpu: 100m
+  #  memory: 128Mi
 
 autoscaling:
   enabled: false
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 2
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
