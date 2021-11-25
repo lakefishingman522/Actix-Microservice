@@ -1,9 +1,5 @@
-use actix_rt::time;
-use std::time::Duration;
-
-use crate::error::CustomError;
 use prometheus::{labels, opts, register_counter, register_gauge, register_histogram_vec};
-use prometheus::{Counter, Gauge, HistogramOpts, HistogramVec, Registry};
+use prometheus::{Counter, Gauge, HistogramOpts, HistogramVec};
 
 const ENVS: &'static [&'static str] = &["dev", "production"];
 

@@ -1,3 +1,3 @@
-# api-service
+# rs_api_service
 
-DEVELOPMENT TESTS
+IN DEVELOPMENT

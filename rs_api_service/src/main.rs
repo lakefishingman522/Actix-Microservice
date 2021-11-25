@@ -1,5 +1,4 @@
 use actix_web::{middleware::Logger, web, App, HttpServer};
-use actix_web_httpauth::middleware::HttpAuthentication;
 use dotenv::dotenv;
 use std::io::Result;
 
@@ -16,8 +15,8 @@ mod request;
 mod state;
 mod token;
 
-use auth_validator::bearer_auth_validator;
-use db::db_connect;
+use auth_validator::auth_validator;
+use db::mongo;
 use error::CustomError;
 use handlers::api::api;
 use handlers::callback::callback;
@@ -30,7 +29,7 @@ async fn main() -> Result<()> {
     dotenv().ok();
     let port = env::var("APP_PORT").unwrap();
     let app_name = env::var("APP_NAME").unwrap();
-    let mongodb: mongodb::Client = db_connect()
+    let mongodb: mongodb::Client = mongo::connect()
         .await
         .map_err(|_e| CustomError::NoDbConnection)
         .unwrap();
@@ -47,8 +46,9 @@ async fn main() -> Result<()> {
                 db: mongodb.clone(),
                 private_key: token::get_key(),
             })
+            //.wrap(auth_validator)
             .wrap(Logger::default())
-            .service(index)
+            .route("/", web::get().to(index))
             .service(
                 web::scope("/api")
                     .route("/callback", web::get().to(callback))

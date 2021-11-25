@@ -24,8 +24,7 @@ mod request;
 mod state;
 mod token;
 
-use auth_validator::bearer_auth_validator;
-use db::db_connect;
+use db::mongo;
 use error::CustomError;
 use handlers::authenticate::authenticate;
 use handlers::discovery::discovery;
@@ -35,7 +34,6 @@ use handlers::login::login;
 use handlers::metrics::metrics;
 use handlers::token::token;
 use handlers::token_pass::token_pass;
-//use metrics::register_metrics;
 use state::AppState;
 use std::env;
 
@@ -44,7 +42,7 @@ async fn main() -> Result<()> {
     dotenv().ok();
     let port = env::var("APP_PORT").unwrap();
     let app_name = env::var("APP_NAME").unwrap();
-    let mongodb: mongodb::Client = db_connect()
+    let mongodb: mongodb::Client = mongo::connect()
         .await
         .map_err(|_e| CustomError::NoDbConnection)
         .unwrap();
@@ -72,10 +70,10 @@ async fn main() -> Result<()> {
                     res
                 })
             })
-            .service(index)
-            .route("/metrics", web::get().to(metrics))
+            .route("/", web::get().to(index))
             .service(
                 web::scope("/oauth")
+                    .route("/", web::get().to(index))
                     .route("/auth", web::post().to(authenticate))
                     .route("/token", web::post().to(token))
                     .route("/tokenpass", web::post().to(token_pass))

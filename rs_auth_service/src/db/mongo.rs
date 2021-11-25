@@ -3,7 +3,7 @@ use std::env;
 
 use crate::error::CustomError;
 
-pub async fn db_connect() -> Result<Client, CustomError> {
+pub async fn connect() -> Result<Client, CustomError> {
   let client_options = ClientOptions::parse(&env::var("MONGO_DB_URI").unwrap())
     .await
     .unwrap();

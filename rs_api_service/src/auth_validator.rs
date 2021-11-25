@@ -4,7 +4,7 @@ use actix_web_httpauth::extractors::AuthenticationError;
 
 use crate::token::decode_token;
 
-pub async fn bearer_auth_validator(
+pub async fn auth_validator(
   req: ServiceRequest,
   credentials: BearerAuth,
 ) -> Result<ServiceRequest, Error> {

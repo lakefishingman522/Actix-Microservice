@@ -1,3 +1,3 @@
-# auth-service
+# rs_auth_service
 
-DEVELOPMENT TESTS
+IN DEVELOPMENT

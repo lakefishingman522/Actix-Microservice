@@ -22,7 +22,6 @@ pub struct Fibo {
 }
 
 pub async fn task(query: web::Query<Fibo>) -> Result<HttpResponse, CustomError> {
-  let token_endpoint = env::var("TOKEN_ENDPOINT").unwrap();
   let res = fibonacci_reccursive(query.num);
   Ok(HttpResponse::Ok().body(res.to_string()))
 }
