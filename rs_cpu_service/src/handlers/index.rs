@@ -5,5 +5,5 @@ use crate::state::AppState;
 pub async fn index(state: web::Data<AppState>) -> impl Responder {
   let app_name = &state.app_name;
 
-  HttpResponse::Ok().body(format!("Welcome too {}!", app_name))
+  HttpResponse::Ok().body(format!("Welcome to {}!", app_name))
 }
