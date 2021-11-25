@@ -37,7 +37,7 @@ env:
   ECR_REPOSITORY: rs-cpu-service              # set this to your Amazon ECR repository name
   ECS_SERVICE: rs-cpu-svc                 # set this to your Amazon ECS service name
   ECS_CLUSTER: production                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: aws-cpu-task  # set this to the path to your Amazon ECS task definition
+  ECS_TASK_DEFINITION: aws-cpu-task:6  # set this to the path to your Amazon ECS task definition
                                                # file, e.g. .aws/task-definition.json
   CONTAINER_NAME: rs-cpu-service           # set this to the name of the container in the
                                                # containerDefinitions section of your task definition
