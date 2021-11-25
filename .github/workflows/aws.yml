@@ -33,14 +33,12 @@ on:
 
 env:
   APP_NAME: rs_cpu_service
-  AWS_REGION: eu-central-1                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: rs-cpu-service              # set this to your Amazon ECR repository name
-  ECS_SERVICE: rs-cpu-svc                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: production                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: .aws/aws-cpu-task.json  # set this to the path to your Amazon ECS task definition
-                                               # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: rs-cpu-service           # set this to the name of the container in the
-                                               # containerDefinitions section of your task definition
+  AWS_REGION: eu-central-1
+  ECR_REPOSITORY: rs-cpu-service
+  ECS_SERVICE: aws-cpu-svc
+  ECS_CLUSTER: production
+  ECS_TASK_DEFINITION: .aws/aws-cpu-task.json
+  CONTAINER_NAME: rs-cpu-service 
 
 jobs:
   deploy:
