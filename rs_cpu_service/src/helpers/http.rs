@@ -7,6 +7,8 @@ where
   for<'de> T: Serialize + Deserialize<'de>,
   for<'de> R: Serialize + Deserialize<'de>,
 {
+  println!("[Request] to: {:?}", endpoint);
+
   Client::default()
     .post(endpoint)
     .send_json(&data.into_inner())

@@ -1,5 +1,9 @@
+use actix_rt::time;
+use std::time::Duration;
+
+use crate::error::CustomError;
 use prometheus::{labels, opts, register_counter, register_gauge, register_histogram_vec};
-use prometheus::{Counter, Gauge, HistogramOpts, HistogramVec};
+use prometheus::{Counter, Gauge, HistogramOpts, HistogramVec, Registry};
 
 const ENVS: &'static [&'static str] = &["dev", "production"];
 
@@ -27,19 +31,4 @@ lazy_static! {
     &["env"]
   )
   .unwrap();
-  //pub static ref REGISTRY: Registry = Registry::new();
 }
-
-// pub fn register_metrics() {
-//   REGISTRY
-//     .register(Box::new(HTTP_COUNTER.clone()))
-//     .expect("collector can be registered");
-
-//   REGISTRY
-//     .register(Box::new(HTTP_BODY_GAUGE.clone()))
-//     .expect("collector can be registered");
-
-//   REGISTRY
-//     .register(Box::new(HTTP_REQ_HISTOGRAM.clone()))
-//     .expect("collector can be registered");
-// }

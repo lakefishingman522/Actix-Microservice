@@ -13,6 +13,7 @@ extern crate lazy_static;
 mod error;
 mod handlers;
 mod metrics;
+mod models;
 mod request;
 mod state;
 
