@@ -6,21 +6,18 @@ use futures::future::FutureExt;
 use std::io::Result;
 
 #[macro_use]
-extern crate magic_crypt;
-#[macro_use]
 extern crate lazy_static;
 
 mod error;
 mod handlers;
-mod metrics;
+mod helpers;
 mod models;
-mod request;
-mod state;
 
+use crate::helpers::metrics;
 use handlers::index::index;
 use handlers::metrics::metrics;
 use handlers::task::task;
-use state::AppState;
+use models::app_state::AppState;
 use std::env;
 
 #[actix_web::main]

@@ -1,10 +1,5 @@
-use actix_web::{web, HttpResponse};
-use prometheus::{
-  HistogramOpts, HistogramVec, IntCounter, IntCounterVec, IntGauge, Opts, Registry,
-};
-
 use crate::error::CustomError;
-use crate::metrics as metric;
+use actix_web::{web, HttpResponse};
 
 pub async fn metrics() -> Result<HttpResponse, CustomError> {
   use prometheus::Encoder;

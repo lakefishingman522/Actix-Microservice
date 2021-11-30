@@ -1,4 +1,3 @@
-use actix_rt::time;
 use std::time::Duration;
 
 use crate::error::CustomError;
