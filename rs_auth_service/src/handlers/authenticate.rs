@@ -1,26 +1,23 @@
 use actix_http::http::uri;
 use actix_web::{web, HttpResponse};
-use bson;
-use mongodb::bson::doc;
-
 use bson::oid::ObjectId;
+
 use chrono::Utc;
 use serde_qs;
 use std::env;
 
+use crate::db;
 use crate::error::CustomError;
-use crate::metrics;
-use crate::models::{AuthCodeResponse, FormParams, User};
-use crate::request::request;
-use crate::state::AppState;
-use crate::token;
+use crate::helpers::{http::request, token};
+use crate::models::app_state::AppState;
+use crate::models::params::{AuthCodeResponse, FormParams};
+use crate::models::token::Token;
+use crate::models::user::User;
 
 pub async fn authenticate(
   form: web::Form<FormParams>,
   state: web::Data<AppState>,
 ) -> Result<HttpResponse, CustomError> {
-  let metric_families = prometheus::gather();
-
   let auth_endpoint = env::var("IDENTITY_ENDPOINT").unwrap();
 
   let data = web::Json(User {
@@ -43,22 +40,18 @@ pub async fn authenticate(
     .concat(),
   );
 
-  println!("[Login] Access code: {:?}", access_code.clone());
-  let db = &state.db.database("auth-db").collection("tokens");
-
-  let _insert_result = db
-    .insert_one(
-      doc! {
-         "access_code": &access_code,
-         "username": &user.username,
-         "user_id": &user._id,
-         "client_id": &form.client_id,
-         "expires": &Utc::now().to_rfc2822() // TODO add LIFE_SPAN
-      },
-      None,
-    )
-    .await
-    .unwrap();
+  let _insert_result = db::token::insert(
+    Token {
+      access_code: access_code.clone(),
+      username: user.username,
+      user_id: user._id,
+      client_id: form.client_id.clone(),
+      expires: Utc::now().to_rfc2822(), // TODO add LIFE_SPAN
+    },
+    &state,
+  )
+  .await
+  .unwrap();
 
   let response = AuthCodeResponse {
     access_code: access_code,

@@ -1,11 +1,8 @@
 use actix_web::dev::Service;
 use actix_web::{middleware::Logger, web, App, HttpServer};
-use actix_web_httpauth::middleware::HttpAuthentication;
 use dotenv::dotenv;
 use futures::future::FutureExt;
-use prometheus::{labels, opts, register_counter, register_gauge, register_histogram_vec};
-use prometheus::{Counter, Encoder, Gauge, HistogramVec, TextEncoder};
-
+use std::env;
 use std::io::Result;
 
 #[macro_use]
@@ -13,17 +10,13 @@ extern crate magic_crypt;
 #[macro_use]
 extern crate lazy_static;
 
-mod auth_validator;
-mod cookie;
 mod db;
 mod error;
 mod handlers;
-mod metrics;
+mod helpers;
 mod models;
-mod request;
-mod state;
-mod token;
 
+use crate::helpers::{metrics, token};
 use db::mongo;
 use error::CustomError;
 use handlers::authenticate::authenticate;
@@ -34,9 +27,7 @@ use handlers::login::login;
 use handlers::metrics::metrics;
 use handlers::token::token;
 use handlers::token_pass::token_pass;
-use state::AppState;
-use std::env;
-
+use models::app_state::AppState;
 #[actix_web::main]
 async fn main() -> Result<()> {
     dotenv().ok();
@@ -71,6 +62,7 @@ async fn main() -> Result<()> {
                 })
             })
             .route("/", web::get().to(index))
+            .route("/metrics", web::get().to(metrics))
             .service(
                 web::scope("/oauth")
                     .route("/", web::get().to(index))

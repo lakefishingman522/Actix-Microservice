@@ -31,19 +31,4 @@ lazy_static! {
     &["env"]
   )
   .unwrap();
-  //pub static ref REGISTRY: Registry = Registry::new();
 }
-
-// pub fn register_metrics() {
-//   REGISTRY
-//     .register(Box::new(HTTP_COUNTER.clone()))
-//     .expect("collector can be registered");
-
-//   REGISTRY
-//     .register(Box::new(HTTP_BODY_GAUGE.clone()))
-//     .expect("collector can be registered");
-
-//   REGISTRY
-//     .register(Box::new(HTTP_REQ_HISTOGRAM.clone()))
-//     .expect("collector can be registered");
-// }

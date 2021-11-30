@@ -1,4 +1,4 @@
-use crate::models::{AccessToken, IdToken};
+use crate::models::token::{AccessToken, IdToken};
 use hmac::{Hmac, NewMac};
 use jwt::{SignWithKey, VerifyWithKey};
 

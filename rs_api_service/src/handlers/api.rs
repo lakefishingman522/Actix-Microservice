@@ -1,7 +1,7 @@
 use actix_web::{web, HttpRequest, HttpResponse};
 
 use crate::error::CustomError;
-use crate::state::AppState;
+use crate::models::app_state::AppState;
 
 pub async fn api(
   req: HttpRequest,

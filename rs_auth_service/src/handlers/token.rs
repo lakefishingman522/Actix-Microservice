@@ -3,29 +3,22 @@ use chrono::Utc;
 use mongodb::bson::doc;
 use std::env;
 
+use crate::db;
 use crate::error::CustomError;
-use crate::metrics;
-use crate::models::{AccessCode, AccessToken, IdToken, SearchUser, TokenReq, TokenResponse, User};
-use crate::request::request;
-use crate::state::AppState;
-use crate::token::{generate_access_token, generate_id_token};
+use crate::helpers::{http::request, token};
+use crate::models::app_state::AppState;
+use crate::models::token::{AccessToken, IdToken, TokenReq, TokenResponse};
+use crate::models::user::{SearchUser, User};
 
 pub async fn token(
   data: web::Json<TokenReq>,
   state: web::Data<AppState>,
 ) -> Result<HttpResponse, CustomError> {
-  println!("[Token]");
-
-  let db = &state.db.database("auth-db");
-
-  let access_code = &db
-    .collection::<AccessCode>("tokens")
-    .find_one(doc! {"access_code": &data.access_code}, None)
+  let access_code = db::token::find_access_code(doc! {"access_code": &data.access_code}, &state)
     .await
     .map_err(|_e| CustomError::Forbidden)?
     .unwrap();
 
-  println!("[Token] Access Code: {:?}", access_code);
   let data = web::Json(SearchUser {
     username: access_code.username.clone(),
   });
@@ -35,11 +28,10 @@ pub async fn token(
     .await
     .map_err(|_e| CustomError::NotFound)
     .unwrap();
-  println!("[Token] User: {:?}", user);
 
   let private_key = &state.private_key;
 
-  let access_token = generate_access_token(
+  let access_token = token::generate_access_token(
     &private_key,
     AccessToken {
       iss: env::var("ISSUER").unwrap(),
@@ -49,7 +41,7 @@ pub async fn token(
     },
   );
 
-  let id_token = generate_id_token(
+  let id_token = token::generate_id_token(
     &private_key,
     IdToken {
       aud: access_code.client_id.clone(),

@@ -1,3 +1,3 @@
-# rust-k3s-microservices
+# rust-actix-microservices
 
-Rust Actix Microservices + K3s + Helm + Prometheus
+Rust containerized Microservices using Actix + Kubernetes + Helm + Prometheus
